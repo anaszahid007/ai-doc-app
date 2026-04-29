@@ -19,7 +19,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
   return (
     <div
       className={cn(
-        "flex w-full gap-4 px-4 py-6 transition-colors hover:bg-zinc-50/50 rounded-2xl",
+        "flex w-full gap-3 sm:gap-4 px-2 sm:px-4 py-4 sm:py-6 transition-colors hover:bg-zinc-50/50 rounded-2xl",
         isUser ? "" : ""
       )}
     >
@@ -34,7 +34,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col gap-2 min-w-0">
+      <div className="flex flex-1 flex-col gap-1.5 sm:gap-2 min-w-0">
         <div className="flex items-center gap-2">
            <span className="text-sm font-bold text-zinc-900">
              {isUser ? "You" : "Assistant"}

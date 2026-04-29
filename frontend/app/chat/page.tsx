@@ -30,7 +30,7 @@ export default function ChatPage() {
   const handleSelectDoc = (id: string) => {
     setDocId(id);
     localStorage.setItem("current_doc_id", id);
-    window.location.reload(); 
+    // Removed window.location.reload() for a seamless SPA experience
   };
 
   return (
@@ -53,17 +53,12 @@ export default function ChatPage() {
           </button>
         </div>
 
-        {error && (
-          <div className="m-4 rounded-xl bg-red-50 p-4 text-sm font-medium text-red-600 border border-red-100">
-            {error}
-          </div>
-        )}
-        
         <div className="flex-1 flex flex-col min-h-0">
           <ChatBox 
             messages={messages} 
             onSendMessage={handleSendMessage} 
             isLoading={isLoading} 
+            error={error}
           />
         </div>
       </main>

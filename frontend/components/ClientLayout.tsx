@@ -27,7 +27,7 @@ export default function ClientLayout({
           <Link href="/" className="flex items-center gap-2">
             <span className={`text-xl font-bold tracking-tight ${isHomePage ? "text-white" : "text-zinc-900"}`}>Doc Chat</span>
           </Link>
-          <nav className="flex items-center gap-6 text-sm font-medium">
+          <nav className="flex items-center gap-3 sm:gap-6 text-[13px] sm:text-sm font-medium">
             <Link href="/" className={isHomePage ? "text-white font-bold" : (pathname === "/" ? "text-primary font-bold" : "text-zinc-500 hover:text-zinc-900 transition-colors")}>Home</Link>
             <Link href="/upload" className={isHomePage ? "text-zinc-400 hover:text-white transition-colors" : (pathname === "/upload" ? "text-primary font-bold" : "text-zinc-500 hover:text-zinc-900 transition-colors")}>Upload</Link>
             <Link href="/chat" className={isHomePage ? "text-zinc-400 hover:text-white transition-colors" : (isChatPage ? "text-primary font-bold" : "text-zinc-500 hover:text-zinc-900 transition-colors")}>Chat</Link>

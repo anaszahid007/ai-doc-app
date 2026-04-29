@@ -48,23 +48,23 @@ export default function Home() {
       <section className="relative z-10 container mx-auto px-6 flex flex-1 flex-col items-center justify-center text-center py-10">
         <div className="mx-auto max-w-5xl space-y-16">
           {/* Heading */}
-          <div className="space-y-8">
-            <h1 className="text-7xl font-black tracking-tighter text-white sm:text-8xl lg:text-[120px] leading-[0.8] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-150">
+          <div className="space-y-6 md:space-y-8">
+            <h1 className="text-5xl font-black tracking-tighter text-white sm:text-8xl lg:text-[120px] leading-[0.85] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-150">
               Understand <br /> 
               <span className="bg-gradient-to-br from-white via-white to-zinc-600 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">everything</span> instantly.
             </h1>
 
-            <p className="mx-auto max-w-2xl text-xl font-medium text-zinc-500 leading-relaxed animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300">
+            <p className="mx-auto max-w-2xl text-lg md:text-xl font-medium text-zinc-500 leading-relaxed animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300">
               Transform static documents into dynamic conversations. <br className="hidden md:block" />
               Intelligence that feels like second nature.
             </p>
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col items-center justify-center gap-6 sm:flex-row animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-500">
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6 animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-500">
             <Link
               href="/upload"
-              className="group relative flex h-16 w-full items-center justify-center gap-3 overflow-hidden rounded-full bg-white px-10 text-lg font-bold text-zinc-950 transition-all hover:scale-105 active:scale-95 sm:w-auto"
+              className="group relative flex h-14 md:h-16 w-full items-center justify-center gap-3 overflow-hidden rounded-full bg-white px-8 md:px-10 text-base md:text-lg font-bold text-zinc-950 transition-all hover:scale-105 active:scale-95 sm:w-auto"
             >
               Get Started Free
               <svg className="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,22 +73,22 @@ export default function Home() {
             </Link>
             <Link
               href="/chat"
-              className="flex h-16 w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-10 text-lg font-bold text-white backdrop-blur-md transition-all hover:bg-white/10 hover:border-white/20 active:scale-95 sm:w-auto"
+              className="flex h-14 md:h-16 w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 md:px-10 text-base md:text-lg font-bold text-white backdrop-blur-md transition-all hover:bg-white/10 hover:border-white/20 active:scale-95 sm:w-auto"
             >
               Open Workspace
             </Link>
           </div>
 
           {/* Bottom Indicators */}
-          <div className="pt-20 grid grid-cols-3 gap-12 border-t border-white/5 animate-in fade-in slide-in-from-bottom-20 duration-1000 delay-700">
+          <div className="pt-16 md:pt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12 border-t border-white/5 animate-in fade-in slide-in-from-bottom-20 duration-1000 delay-700">
             {[
               { label: "Processing", val: "Real-time" },
               { label: "AI Stack", val: "Gemini 1.5" },
               { label: "Privacy", val: "End-to-End" },
             ].map((stat, i) => (
-              <div key={i} className="flex flex-col gap-1.5 text-left md:text-center">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">{stat.label}</span>
-                <span className="text-base font-bold text-zinc-300 tracking-tight">{stat.val}</span>
+              <div key={i} className="flex flex-col gap-1 md:gap-1.5 text-center">
+                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">{stat.label}</span>
+                <span className="text-sm md:text-base font-bold text-zinc-300 tracking-tight">{stat.val}</span>
               </div>
             ))}
           </div>
