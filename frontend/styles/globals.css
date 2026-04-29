@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  /* Premium Light Mode Palette */
+  --background: #ffffff;
+  --foreground: #0f172a;
+  
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  
+  --secondary: #f8fafc;
+  --secondary-foreground: #0f172a;
+  
+  --accent: #eff6ff;
+  --accent-foreground: #1d4ed8;
+  
+  --border: #e2e8f0;
+  --input: #f1f5f9;
+  --ring: #3b82f6;
+  
+  --radius: 0.75rem;
+}
+
+/* Optional Dark Mode - Keeping it subtle and deep */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Soft Shadow Utility */
+.shadow-soft {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+@layer base {
+  * {
+    @apply border-[--border];
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom Scrollbar Styles */
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+/* Standard Animations */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in-from-top {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slide-in-from-bottom {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes zoom-in {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-in {
+  animation-fill-mode: both;
+}
+
+.fade-in { animation-name: fade-in; }
+.slide-in-from-top-4 { animation-name: slide-in-from-top; }
+.slide-in-from-bottom-8 { animation-name: slide-in-from-bottom; }
+.slide-in-from-bottom-12 { animation-name: slide-in-from-bottom; }
+.slide-in-from-bottom-16 { animation-name: slide-in-from-bottom; }
+.zoom-in { animation-name: zoom-in; }
+
+.duration-1000 { animation-duration: 1000ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-700 { animation-delay: 700ms; }
+
+/* Falling Beam Animations */
+@keyframes beam-fall {
+  0% { transform: translateY(-20vh); opacity: 0; }
+  10% { opacity: 0.4; }
+  90% { opacity: 0.4; }
+  100% { transform: translateY(120vh); opacity: 0; }
+}
+
+.animate-beam-fall {
+  animation: beam-fall linear infinite;
+}
