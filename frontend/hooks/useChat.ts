@@ -1,18 +1,47 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { convApi } from "@/lib/api";
 
-interface Message {
+export interface Message {
   role: "user" | "assistant";
   content: string;
-  timestamp: Date;
+  created_at?: string;
+  timestamp?: Date;
 }
 
-export function useChat(documentId?: string) {
+export function useChat(documentId?: string, conversationId?: string) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const socketRef = useRef<WebSocket | null>(null);
+
+  // Load message history when conversation changes
+  useEffect(() => {
+    if (!conversationId) {
+        setMessages([]);
+        return;
+    }
+
+    const fetchHistory = async () => {
+        try {
+            setIsLoading(true);
+            const history = await convApi.getMessages(conversationId);
+            setMessages(history.map((m: any) => ({
+                role: m.role,
+                content: m.content,
+                timestamp: m.created_at ? new Date(m.created_at) : new Date()
+            })));
+        } catch (err: any) {
+            console.error("Failed to fetch history:", err);
+            setError("Failed to load message history.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    fetchHistory();
+  }, [conversationId]);
 
   useEffect(() => {
     if (!documentId) return;
@@ -38,16 +67,25 @@ export function useChat(documentId?: string) {
       setMessages((prev) => {
         const lastMessage = prev[prev.length - 1];
         
-        // If the last message is from assistant, update it with new content
-        if (lastMessage && lastMessage.role === "assistant") {
+        if (lastMessage && lastMessage.role === "assistant" && !data.is_complete) {
           const updatedMessages = [...prev];
           updatedMessages[updatedMessages.length - 1] = {
             ...lastMessage,
-            content: data.answer, // Use the full answer accumulated so far
+            content: data.answer,
           };
           return updatedMessages;
+        } else if (data.is_complete) {
+            // Final update
+            const updatedMessages = [...prev];
+            if (lastMessage && lastMessage.role === "assistant") {
+                updatedMessages[updatedMessages.length - 1] = {
+                    ...lastMessage,
+                    content: data.answer,
+                };
+                return updatedMessages;
+            }
+            return prev;
         } else {
-          // If no assistant message exists yet, create one
           return [...prev, {
             role: "assistant",
             content: data.answer,
@@ -83,7 +121,6 @@ export function useChat(documentId?: string) {
     setIsLoading(true);
     setError(null);
 
-    // Add user message
     const userMessage: Message = {
       role: "user",
       content: question,
@@ -91,9 +128,11 @@ export function useChat(documentId?: string) {
     };
     setMessages((prev) => [...prev, userMessage]);
 
-    // Send via WebSocket
-    socketRef.current.send(JSON.stringify({ question }));
-  }, []);
+    socketRef.current.send(JSON.stringify({ 
+        question,
+        conversation_id: conversationId 
+    }));
+  }, [conversationId]);
 
   const clearMessages = useCallback(() => {
     setMessages([]);

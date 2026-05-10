@@ -2,4 +2,5 @@ from pydantic import BaseModel
 
 class ChatRequest(BaseModel):
     question: str
-    document_id: str | None = None
+    document_id: str
+    conversation_id: str | None = None

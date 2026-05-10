@@ -5,11 +5,7 @@ import MessageBubble from "./MessageBubble";
 import Loader from "./Loader";
 import { cn } from "@/lib/utils";
 
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
-}
+import { Message } from "@/hooks/useChat";
 
 interface ChatBoxProps {
   messages: Message[];

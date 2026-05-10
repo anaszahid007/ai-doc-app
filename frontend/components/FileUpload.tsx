@@ -4,6 +4,8 @@ import React, { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import Loader from "./Loader";
 
+import { docApi, convApi } from "@/lib/api";
+
 interface FileUploadProps {
   onUploadSuccess: (data: any) => void;
   className?: string;
@@ -23,22 +25,24 @@ export default function FileUpload({ onUploadSuccess, className }: FileUploadPro
     setIsUploading(true);
     setError(null);
 
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      const response = await fetch(`${apiUrl}/upload/`, {
-        method: "POST",
-        body: formData,
+      // 1. Upload Document
+      const uploadRes = await docApi.upload(file);
+      const documentId = uploadRes.data.document_id;
+      
+      // 2. Create a conversation for this document
+      const convRes = await convApi.create({
+        document_id: documentId,
+        title: `Chat: ${file.name}`
       });
 
-      if (!response.ok) throw new Error("Upload failed");
-
-      const data = await response.json();
-      onUploadSuccess(data);
-    } catch (err) {
-      setError("Failed to upload document. Please try again.");
+      onUploadSuccess({
+        ...uploadRes.data,
+        conversation_id: convRes.id,
+        file_name: file.name
+      });
+    } catch (err: any) {
+      setError(err.message || "Failed to upload document. Please try again.");
       console.error(err);
     } finally {
       setIsUploading(false);

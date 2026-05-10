@@ -3,11 +3,7 @@ import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
-}
+import { Message } from "@/hooks/useChat";
 
 interface MessageBubbleProps {
   message: Message;
@@ -40,7 +36,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
              {isUser ? "You" : "Assistant"}
            </span>
            <span className="text-[10px] font-medium text-zinc-400">
-             {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+             {new Date(message.timestamp || new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
            </span>
         </div>
 

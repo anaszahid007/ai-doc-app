@@ -1,58 +1,83 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import ChatBox from "@/components/ChatBox";
 import Sidebar from "@/components/Sidebar";
 import { useChat } from "@/hooks/useChat";
+import { convApi } from "@/lib/api";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function ChatPage() {
-  const [docId, setDocId] = useState<string | null>(null);
-  const [documents, setDocuments] = useState<{ id: string; name: string }[]>([]);
-  
-  useEffect(() => {
-    // In a real app, we'd fetch this from the API
-    const storedDocId = localStorage.getItem("current_doc_id");
-    const storedDocName = localStorage.getItem("current_doc_name") || "Document.pdf";
-    
-    setDocId(storedDocId);
-    
-    if (storedDocId) {
-      setDocuments([{ id: storedDocId, name: storedDocName }]);
-    }
-  }, []);
+  const [activeConv, setActiveConv] = useState<any>(null);
+  const [conversations, setConversations] = useState<any[]>([]);
+  const router = useRouter();
+  const { isAuthenticated, isLoading } = useAuth();
 
-  const { messages, isLoading, error, sendMessage } = useChat(docId || undefined);
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+      return;
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const fetchConvs = async () => {
+        try {
+            const data = await convApi.list();
+            setConversations(data);
+            if (data.length > 0 && !activeConv) {
+                setActiveConv(data[0]);
+            }
+        } catch (err) {
+            console.error("Failed to fetch conversations", err);
+        }
+    };
+
+    fetchConvs();
+  }, [isAuthenticated, router]);
+
+  const { messages, isLoading: chatLoading, error, sendMessage } = useChat(
+    activeConv?.document_id,
+    activeConv?.id
+  );
 
   const handleSendMessage = (content: string) => {
     sendMessage(content);
   };
 
-  const handleSelectDoc = (id: string) => {
-    setDocId(id);
-    localStorage.setItem("current_doc_id", id);
-    // Removed window.location.reload() for a seamless SPA experience
+  const handleSelectConv = (id: string) => {
+    const conv = conversations.find(c => c.id === id);
+    if (conv) setActiveConv(conv);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null; // Will redirect in useEffect
+  }
+
   return (
-    <div className="flex flex-1 overflow-hidden">
+    <div className="flex flex-1 overflow-hidden h-full">
       <Sidebar 
-        documents={documents} 
-        currentDocId={docId || undefined} 
-        onSelectDoc={handleSelectDoc}
+        documents={conversations.map(c => ({ id: c.id, name: c.title }))} 
+        currentDocId={activeConv?.id} 
+        onSelectDoc={handleSelectConv}
         className="hidden md:flex" 
       />
       
-      <main className="flex-1 flex flex-col min-w-0 bg-white">
-        {/* Mobile Header */}
-        <div className="md:hidden border-b border-zinc-100 p-4 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-10">
-          <h1 className="font-bold">Chat</h1>
-          <button className="p-2 rounded-lg bg-zinc-50 text-zinc-600">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-          </button>
-        </div>
-
+      <main className="flex-1 flex flex-col min-w-0 bg-white relative">
         <div className="flex-1 flex flex-col min-h-0">
           <ChatBox 
             messages={messages} 
