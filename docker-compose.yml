@@ -22,11 +22,10 @@ services:
     build: ./backend
     ports:
       - "8000:8000"
+    env_file:
+      - ./backend/.env
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/docchat
-      - GEMINI_API_KEY=AIzaSyD9qI2BJkKsRdw9ESURlj5eqQVKV_LxfdM
-      - SECRET_KEY=2bb4b80b713bd4df8ee86423e40df31c56f2dd8e0e4a36efc877e731129e9253
-      - MODEL_NAME=gemini-flash-latest
     depends_on:
       db:
         condition: service_healthy

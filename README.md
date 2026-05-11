@@ -36,11 +36,11 @@
 ### Method 1: Docker (Recommended)
 
 1. **Clone the repo**
-2. **Create a `.env` file in the root directory**:
-   ```env
-   GEMINI_API_KEY=your_gemini_api_key
-   SECRET_KEY=generate_a_random_secret_here
+2. **Create `backend/.env` from the example file**:
+   ```bash
+   cp backend/.env.example backend/.env
    ```
+   Then update `backend/.env` with your `GEMINI_API_KEY`, `SECRET_KEY`, and any local overrides.
 3. **Launch the stack**:
    ```bash
    docker-compose up --build
